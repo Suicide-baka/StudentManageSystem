@@ -1,0 +1,21 @@
+	public User login(Connection connection,User user,String role) throws SQLException{//登录
+		User resultUser = null;
+		String sql = null;
+		if(role.equals("admin")){
+			sql = "select * from administrator where username='"+user.getUsername()+"' and password='"+user.getPassword()+"'";
+		}else{
+			sql = "select * from user where username='"+user.getUsername()+"' and password='"+user.getPassword()+"'";
+		}
+		ResultSet result = statementQuery(connection, sql);
+		if(result.next()){
+			resultUser = new User();
+			resultUser.setUsername(result.getString("username"));
+			resultUser.setPassword(result.getString("password"));
+			if(role.equals("admin")){
+				resultUser.setSno(null);
+			}else{
+				resultUser.setSno(result.getString("sno"));
+			}
+		}
+		return resultUser;
+	}
